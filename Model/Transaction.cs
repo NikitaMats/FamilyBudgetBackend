@@ -1,4 +1,6 @@
-﻿namespace FamilyBudgetBackend.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FamilyBudgetBackend.Model
 {
     public class Transaction
     {
@@ -9,6 +11,7 @@
         private int _userId;
         private int _categoryId;
 
+        [Required]
         public int Id
         {
             get => _id;
@@ -16,6 +19,7 @@
                 : throw new ArgumentException("Id must be positive");
         }
 
+        [Required]
         public float Amount
         {
             get => _amount;
@@ -23,6 +27,7 @@
                 : throw new ArgumentException("Amount cannot be zero");
         }
 
+        [Required]
         public DateTime Date
         {
             get => _date;
@@ -37,6 +42,7 @@
                 : throw new ArgumentNullException(nameof(Description));
         }
 
+        [Required]
         public int UserId
         {
             get => _userId;
@@ -44,6 +50,7 @@
                 : throw new ArgumentException("UserId must be positive");
         }
 
+        [Required]
         public int CategoryId
         {
             get => _categoryId;
