@@ -1,65 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FamilyBudgetBackend.Model
 {
     public class Transaction
     {
-        private int _id;
-        private float _amount;
-        private DateTime _date;
-        private string _description;
-        private int _userId;
-        private int _categoryId;
+        public int Id { get; set; }                  // Уникальный ID транзакции (автоинкремент)
+        public decimal Amount { get; set; }          // Сумма (например, 1500.50)
+        public DateTime Date { get; set; }           // Дата (2023-11-20T14:30:00Z)
+        public string Description { get; set; }      // Описание ("Продукты в Пятерочке")
 
-        [Required]
-        public int Id
-        {
-            get => _id;
-            set => _id = value > 0 ? value
-                : throw new ArgumentException("Id must be positive");
-        }
+        // Внешние ключи
+        public int UserId { get; set; }              // ID пользователя
+        public int CategoryId { get; set; }          // ID категории
 
-        [Required]
-        public float Amount
-        {
-            get => _amount;
-            set => _amount = value != 0 ? value
-                : throw new ArgumentException("Amount cannot be zero");
-        }
-
-        [Required]
-        public DateTime Date
-        {
-            get => _date;
-            set => _date = value <= DateTime.Now ? value
-                : throw new ArgumentException("Date cannot be in the future");
-        }
-
-        public string Description
-        {
-            get => _description;
-            set => _description = !string.IsNullOrWhiteSpace(value) ? value
-                : throw new ArgumentNullException(nameof(Description));
-        }
-
-        [Required]
-        public int UserId
-        {
-            get => _userId;
-            set => _userId = value > 0 ? value
-                : throw new ArgumentException("UserId must be positive");
-        }
-
-        [Required]
-        public int CategoryId
-        {
-            get => _categoryId;
-            set => _categoryId = value > 0 ? value
-                : throw new ArgumentException("CategoryId must be positive");
-        }
-
-        // Навигационные свойства
-        public User User { get; set; }
-        public Category Category { get; set; }
+        // Навигационные свойства (связи между таблицами)
+        [JsonIgnore]
+        public User User { get; set; }               // Какой пользователь создал транзакцию
+        [JsonIgnore]
+        public Category Category { get; set; }       // Какая категория (еда, транспорт)
     }
 }

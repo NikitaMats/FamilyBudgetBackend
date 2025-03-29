@@ -1,26 +1,16 @@
-﻿namespace FamilyBudgetBackend.Model
+﻿using System.Text.Json.Serialization;
+
+namespace FamilyBudgetBackend.Model
 {
     public class Category
     {
-        private int _id;
-        private string _name;
-        private int _transactionTypeId;
+        public int Id { get; set; }                  // ID категории
+        public string Name { get; set; }             // Название ("Еда", "Транспорт")
 
-        public int Id { get; set; }
-        public string Name
-        {
-            get => _name;
-            set => _name = value ?? throw new ArgumentNullException(nameof(value));
-        }
+        // Связь с типом транзакции (доход/расход)
+        public int TransactionTypeId { get; set; }
 
-        public int TransactionTypeId
-        {
-            get => _transactionTypeId;
-            set => _transactionTypeId = value > 0 ? value
-                : throw new ArgumentException("TransactionTypeId must be positive");
-        }
-
-        // Навигационное свойство
+        [JsonIgnore]
         public TransactionType TransactionType { get; set; }
     }
 }
