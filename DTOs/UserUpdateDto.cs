@@ -2,9 +2,9 @@
 
 namespace FamilyBudgetBackend.DTOs
 {
-    public class CategoryCreateDto
+    public class UserUpdateDto
     {
         [Required] public string Name { get; set; }
-        [Required] public int TransactionTypeId { get; set; }
+        [Required][EmailAddress] public string Email { get; set; }
     }
 }

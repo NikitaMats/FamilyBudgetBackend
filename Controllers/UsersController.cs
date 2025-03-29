@@ -27,8 +27,8 @@ namespace FamilyBudgetBackend.Controllers
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDetailDto>> GetById(
-    int id,
-    [FromQuery] bool includeTransactions = false)
+        int id,
+        [FromQuery] bool includeTransactions = false)
         {
             var query = _db.Users.AsQueryable();
 
@@ -61,6 +61,30 @@ namespace FamilyBudgetBackend.Controllers
             };
 
             return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDto dto)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null) return NotFound();
+
+            user.Name = dto.Name;
+            user.Email = dto.Email;
+
+            await _db.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null) return NotFound();
+
+            _db.Users.Remove(user);
+            await _db.SaveChangesAsync();
+            return NoContent();
         }
     }
 

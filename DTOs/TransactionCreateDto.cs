@@ -1,15 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FamilyBudgetBackend.DTOs
 {
     public class TransactionCreateDto
     {
-        public decimal Amount { get; set; }
+        [Required] public decimal Amount { get; set; }
+        [JsonIgnore] public DateTime Date { get; set; } = DateTime.UtcNow;
         public string Description { get; set; }
-        public int UserId { get; set; }
-        public int CategoryId { get; set; }
-
-        [JsonIgnore] // Игнорируем при десериализации
-        public DateTime Date { get; set; } = DateTime.UtcNow;
+        [Required] public int UserId { get; set; }
+        [Required] public int CategoryId { get; set; }
     }
 }

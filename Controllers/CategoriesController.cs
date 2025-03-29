@@ -55,5 +55,16 @@ namespace FamilyBudgetBackend.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _db.Categories.FindAsync(id);
+            if (category == null) return NotFound();
+
+            _db.Categories.Remove(category);
+            await _db.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
