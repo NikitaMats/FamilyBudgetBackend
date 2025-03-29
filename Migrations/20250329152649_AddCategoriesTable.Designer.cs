@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FamilyBudgetBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250329143107_AddCategoriesTable")]
+    [Migration("20250329152649_AddCategoriesTable")]
     partial class AddCategoriesTable
     {
         /// <inheritdoc />

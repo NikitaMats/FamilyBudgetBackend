@@ -7,6 +7,6 @@
         public string Email { get; set; }            // Email ("ivan@example.com")
 
         // Навигационное свойство (1 пользователь → N транзакций)
-        public List<Transaction> Transactions { get; set; } = new();
+        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
     }
 }

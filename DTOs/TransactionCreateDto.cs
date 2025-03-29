@@ -2,7 +2,7 @@
 
 namespace FamilyBudgetBackend.DTOs
 {
-    public class CreateTransactionDto
+    public class TransactionCreateDto
     {
         public decimal Amount { get; set; }
         public string Description { get; set; }

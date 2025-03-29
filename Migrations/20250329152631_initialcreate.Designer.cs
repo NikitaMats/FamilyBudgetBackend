@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FamilyBudgetBackend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250329112942_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250329152631_initialcreate")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace FamilyBudgetBackend.Migrations
 
                     b.HasIndex("TransactionTypeId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("FamilyBudgetBackend.Model.Transaction", b =>
@@ -83,7 +83,7 @@ namespace FamilyBudgetBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TransactionType");
+                    b.ToTable("TransactionTypes");
                 });
 
             modelBuilder.Entity("FamilyBudgetBackend.Model.User", b =>

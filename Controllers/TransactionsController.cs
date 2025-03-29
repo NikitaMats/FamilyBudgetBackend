@@ -48,17 +48,25 @@ namespace FamilyBudgetBackend.Controllers
         // POST /api/transactions
         [HttpPost]
         public async Task<ActionResult<Transaction>> CreateTransaction(
-        [FromBody] CreateTransactionDto transactionDto)
+        [FromBody] TransactionCreateDto transactionDto)
         {
-            // Проверяем существование пользователя и категории
-            var userExists = await _db.Users.AnyAsync(u => u.Id == transactionDto.UserId);
-            var categoryExists = await _db.Categories.AnyAsync(c => c.Id == transactionDto.CategoryId);
+            // Проверяем существование пользователя
+            var user = await _db.Users
+                .Include(u => u.Transactions) // Явно включаем транзакции
+                .FirstOrDefaultAsync(u => u.Id == transactionDto.UserId);
 
-            if (!userExists || !categoryExists)
-            {
-                return BadRequest("User or Category not found");
-            }
+            if (user == null)
+                return NotFound("User not found");
 
+
+            // Проверяем существование категории
+            var categoryExists = await _db.Categories
+                .AnyAsync(c => c.Id == transactionDto.CategoryId);
+
+            if (!categoryExists)
+                return NotFound("Category not found");
+
+            // Создаем новую транзакцию
             var transaction = new Transaction
             {
                 Amount = transactionDto.Amount,
@@ -68,10 +76,18 @@ namespace FamilyBudgetBackend.Controllers
                 CategoryId = transactionDto.CategoryId
             };
 
-            _db.Transactions.Add(transaction);
-            await _db.SaveChangesAsync();
+            // Добавляем транзакцию пользователю
+            user.Transactions.Add(transaction);
 
-            return CreatedAtAction(nameof(GetById), new { id = transaction.Id }, transaction);
+            try
+            {
+                await _db.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = transaction.Id }, transaction);
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest($"Error saving transaction: {ex.InnerException?.Message}");
+            }
         }
     }
 }
