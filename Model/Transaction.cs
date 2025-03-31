@@ -5,19 +5,17 @@ namespace FamilyBudgetBackend.Model
 {
     public class Transaction
     {
-        public int Id { get; set; }                  // Уникальный ID транзакции (автоинкремент)
-        public decimal Amount { get; set; }          // Сумма (например, 1500.50)
-        public DateTime Date { get; set; }           // Дата (2023-11-20T14:30:00Z)
-        public string Description { get; set; }      // Описание ("Продукты в Пятерочке")
+        public int Id { get; set; }                  
+        public decimal Amount { get; set; }          
+        public DateTime Date { get; set; }          
+        public string Description { get; set; }     
 
-        // Внешние ключи
-        public int UserId { get; set; }              // ID пользователя
-        public int CategoryId { get; set; }          // ID категории
+        public int UserId { get; set; }              
+        public int CategoryId { get; set; }         
 
-        // Навигационные свойства (связи между таблицами)
         [JsonIgnore]
-        public User User { get; set; }               // Какой пользователь создал транзакцию
+        public User User { get; set; }               
         [JsonIgnore]
-        public Category Category { get; set; }       // Какая категория (еда, транспорт)
+        public Category Category { get; set; }       
     }
 }

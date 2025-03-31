@@ -4,10 +4,9 @@ namespace FamilyBudgetBackend.Model
 {
     public class Category
     {
-        public int Id { get; set; }                  // ID категории
-        public string Name { get; set; }             // Название ("Еда", "Транспорт")
+        public int Id { get; set; }                
+        public string Name { get; set; }             
 
-        // Связь с типом транзакции (доход/расход)
         public int TransactionTypeId { get; set; }
 
         [JsonIgnore]

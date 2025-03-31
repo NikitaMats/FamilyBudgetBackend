@@ -14,10 +14,16 @@ namespace FamilyBudgetBackend.Controllers
 
         public CategoriesController(ApplicationDbContext db) => _db = db;
 
+        /// <summary>
+        /// Api для получения полного списка категорий.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<Category>>> GetAll() =>
             await _db.Categories.Include(c => c.TransactionType).ToListAsync();
 
+        /// <summary>
+        /// Api для получения категории через её ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetById(int id)
         {
@@ -33,11 +39,13 @@ namespace FamilyBudgetBackend.Controllers
             return category;
         }
 
+        /// <summary>
+        /// Api для создания новой категории.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategory(
         [FromBody] CategoryCreateDto categoryDto)
         {
-            // Проверяем существование типа транзакции
             var typeExists = await _db.TransactionTypes
                 .AnyAsync(tt => tt.Id == categoryDto.TransactionTypeId);
 
@@ -56,6 +64,9 @@ namespace FamilyBudgetBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
 
+        /// <summary>
+        /// Api для удаления категории.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -63,6 +74,29 @@ namespace FamilyBudgetBackend.Controllers
             if (category == null) return NotFound();
 
             _db.Categories.Remove(category);
+            await _db.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Api для редактирование категории через её ID.
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryCreateDto categoryDto)
+        {
+            var category = await _db.Categories.FindAsync(id);
+            if (category == null) return NotFound();
+
+            // Проверяем существование типа транзакции
+            var typeExists = await _db.TransactionTypes
+                .AnyAsync(tt => tt.Id == categoryDto.TransactionTypeId);
+
+            if (!typeExists)
+                return BadRequest("TransactionType not found");
+
+            category.Name = categoryDto.Name;
+            category.TransactionTypeId = categoryDto.TransactionTypeId;
+
             await _db.SaveChangesAsync();
             return NoContent();
         }
