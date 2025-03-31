@@ -18,6 +18,9 @@ namespace FamilyBudgetBackend.Controllers
             _db = db;  
         }
 
+        /// <summary>
+        /// Api for getting a list of transactions.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<Transaction>>> GetAll(
         [FromQuery] string? type,
@@ -60,6 +63,9 @@ namespace FamilyBudgetBackend.Controllers
             return await query.ToListAsync();
         }
 
+        /// <summary>
+        /// Api for receiving a transaction via its ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetById(int id)
         {
@@ -76,6 +82,9 @@ namespace FamilyBudgetBackend.Controllers
             return transaction;
         }
 
+        /// <summary>
+        /// Api for creating a new transaction.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<Transaction>> CreateTransaction(
         [FromBody] TransactionCreateDto transactionDto)
@@ -115,6 +124,9 @@ namespace FamilyBudgetBackend.Controllers
             }
         }
 
+        /// <summary>
+        /// Api for calculating the difference between income and expenses.
+        /// </summary>
         [HttpGet("balance")]
         public async Task<ActionResult<decimal>> GetBalance()
         {
@@ -129,6 +141,9 @@ namespace FamilyBudgetBackend.Controllers
             return Ok(income - expense);
         }
 
+        /// <summary>
+        /// Api for response on transactions and categories.
+        /// </summary>
         [HttpGet("by-categories")]
         public async Task<ActionResult<List<CategoryReportDto>>> GetByCategories(
         [FromQuery] DateTime? startDate,
@@ -165,6 +180,9 @@ namespace FamilyBudgetBackend.Controllers
             return Ok(report);
         }
 
+        /// <summary>
+        /// Api for responding to transactions and users.
+        /// </summary>
         [HttpGet("by-users")]
         public async Task<ActionResult<List<UserReportDto>>> GetByUsers()
         {
@@ -183,6 +201,9 @@ namespace FamilyBudgetBackend.Controllers
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Api for changing transaction by ID.
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTransaction(int id, [FromBody] TransactionUpdateDto dto)
         {

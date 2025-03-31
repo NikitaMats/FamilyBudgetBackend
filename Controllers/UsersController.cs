@@ -14,9 +14,15 @@ namespace FamilyBudgetBackend.Controllers
 
         public UsersController(ApplicationDbContext db) => _db = db;
 
+        /// <summary>
+        /// Api for getting list of users.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetAll() => await _db.Users.ToListAsync();
 
+        /// <summary>
+        /// Api for creating a user.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<User>> Create([FromBody] User user)
         {
@@ -25,6 +31,9 @@ namespace FamilyBudgetBackend.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Api for getting user by ID.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDetailDto>> GetById(
         int id,
@@ -63,6 +72,9 @@ namespace FamilyBudgetBackend.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Api for editing user by ID.
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDto dto)
         {
@@ -76,6 +88,9 @@ namespace FamilyBudgetBackend.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Api for deleting user by ID.
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

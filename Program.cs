@@ -6,13 +6,13 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// === 1. Регистрация сервисов ===
+// Registration of services
 
-// Добавляем сервисы контроллеров
+// Adding controller services
 builder.Services.AddControllers();
 
-// Добавляем Swagger
-builder.Services.AddEndpointsApiExplorer(); // Необходим для Swagger
+// Add Swagger
+builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -22,20 +22,20 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API для управления семейным бюджетом",
         Contact = new OpenApiContact { Name = "Nikita M.", Email = "dev@example.com" }
     });
-}); // Генерирует UI для Swagger
+}); //Generates UI for Swagger. Unnecessary since the problem was elsewhere.
 
-// Добавляем контекст БД (SQLite)
+// Adding a DB context (SQLite)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Добавляем CORS (разрешаем запросы с любого домена)
+// Add CORS (allow requests from any domain)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()  // Разрешаем любой домен
-              .AllowAnyMethod()  // Любой HTTP-метод (GET, POST...)
-              .AllowAnyHeader(); // Любые заголовки
+        policy.AllowAnyOrigin()  // We allow any domain
+              .AllowAnyMethod()  // Any HTTP method (GET, POST...)
+              .AllowAnyHeader(); // Any headings
     });
 });
 
@@ -47,7 +47,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var db = services.GetRequiredService<ApplicationDbContext>();
-        db.Database.Migrate(); // Применяем миграции
+        db.Database.Migrate();
 
         // Seed initial data
         if (!db.TransactionTypes.Any())
@@ -72,22 +72,22 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Включаем Swagger только в Development-режиме
+// Enable Swagger only in Development mode
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger(c =>
     {
         c.SerializeAsV2 = true;
-    }); // Включает генерацию JSON-спецификации
-    app.UseSwaggerUI(); // Включает Swagger UI
+    }); 
+    app.UseSwaggerUI(); // Enables Swagger UI
 }
 
-// === 2. Конфигурация middleware ===
+// Middleware Configuration
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-app.UseCors("AllowAll");  // Включаем CORS
-app.MapControllers();     // Подключаем контроллеры
+app.UseCors("AllowAll");  // Enable CORS
+app.MapControllers();     // Connecting controllers
 
-// === 3. Запуск сервера ===
+// Starting the server
 app.Run();

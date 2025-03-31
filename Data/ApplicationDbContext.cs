@@ -8,34 +8,32 @@ namespace FamilyBudgetBackend.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        // Таблицы в БД
-        public DbSet<Transaction> Transactions { get; set; }  // Таблица Transactions
-        public DbSet<User> Users { get; set; }               // Таблица Users
-        public DbSet<Category> Categories { get; set; }      // Таблица Categories
-        public DbSet<TransactionType> TransactionTypes { get; set; } // Таблица TransactionTypes
+        // Tables in DB
+        public DbSet<Transaction> Transactions { get; set; }  // Transactions table
+        public DbSet<User> Users { get; set; }               // Users table
+        public DbSet<Category> Categories { get; set; }      // Categories table
+        public DbSet<TransactionType> TransactionTypes { get; set; } // TransactionTypes table
 
-        // Конструктор (DI)
+        // Constructor (DI)
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        // Настройка связей между таблицами
+        // Setting up relationships between tables
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Настройка связи "1 пользователь → N транзакций"
+            // Setting up the connection "1 user → N transactions"
             modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.User)         // У транзакции есть 1 пользователь
-                .WithMany(u => u.Transactions)  // У пользователя много транзакций
-                .HasForeignKey(t => t.UserId);  // Внешний ключ
+                .HasOne(t => t.User)         
+                .WithMany(u => u.Transactions)  
+                .HasForeignKey(t => t.UserId);
 
-            // Настройка связи Категория → Тип транзакции
+            // Setting up the connection Category → Transaction Type
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.TransactionType)
                 .WithMany(tt => tt.Categories)
                 .HasForeignKey(c => c.TransactionTypeId);
-
-            // Дополнительные настройки можно добавить здесь
         }
     }
 }

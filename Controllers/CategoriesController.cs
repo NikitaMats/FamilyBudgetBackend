@@ -15,14 +15,14 @@ namespace FamilyBudgetBackend.Controllers
         public CategoriesController(ApplicationDbContext db) => _db = db;
 
         /// <summary>
-        /// Api для получения полного списка категорий.
+        /// Api for getting a full list of categories.
         /// </summary>
         [HttpGet]
         public async Task<ActionResult<List<Category>>> GetAll() =>
             await _db.Categories.Include(c => c.TransactionType).ToListAsync();
 
         /// <summary>
-        /// Api для получения категории через её ID.
+        /// Api for getting category via its ID.
         /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetById(int id)
@@ -40,7 +40,7 @@ namespace FamilyBudgetBackend.Controllers
         }
 
         /// <summary>
-        /// Api для создания новой категории.
+        /// Api for creating a new category.
         /// </summary>
         [HttpPost]
         public async Task<ActionResult<Category>> CreateCategory(
@@ -65,7 +65,7 @@ namespace FamilyBudgetBackend.Controllers
         }
 
         /// <summary>
-        /// Api для удаления категории.
+        /// Api for deleting a category.
         /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -79,7 +79,7 @@ namespace FamilyBudgetBackend.Controllers
         }
 
         /// <summary>
-        /// Api для редактирование категории через её ID.
+        /// Api for editing a category via its ID.
         /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryCreateDto categoryDto)
@@ -87,7 +87,6 @@ namespace FamilyBudgetBackend.Controllers
             var category = await _db.Categories.FindAsync(id);
             if (category == null) return NotFound();
 
-            // Проверяем существование типа транзакции
             var typeExists = await _db.TransactionTypes
                 .AnyAsync(tt => tt.Id == categoryDto.TransactionTypeId);
 
